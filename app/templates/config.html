@@ -1,0 +1,197 @@
+{% extends "base.html" %}
+{% block title %}Server config{% endblock %}
+
+{% block internal_css %}
+<style>
+    body {
+        background: #0f1419;
+        color: #e7ecf3;
+        min-height: 100vh;
+    }
+    .cfg-wrap {
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 2rem 1rem 3rem;
+    }
+    .cfg-card {
+        background: #1a222d;
+        border: 1px solid #2a3544;
+        border-radius: 0.75rem;
+        padding: 1.25rem 1.5rem;
+        margin-bottom: 1rem;
+    }
+    .cfg-card h2 {
+        font-size: 1.1rem;
+        margin-bottom: 1rem;
+        color: #9db0c7;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+    }
+    .cfg-muted { color: #8b9bb0; }
+    .badge-ok { background: #198754; }
+    .badge-bad { background: #dc3545; }
+    table.cfg td, table.cfg th {
+        border-color: #2a3544;
+        vertical-align: top;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 0.85rem;
+    }
+    .btn-row form { display: inline-block; margin: 0.25rem 0.35rem 0.25rem 0; }
+    .form-control, .form-select {
+        background: #0f1419;
+        border-color: #2a3544;
+        color: #e7ecf3;
+    }
+    .form-control:focus, .form-select:focus {
+        background: #0f1419;
+        border-color: #4d6b8a;
+        color: #e7ecf3;
+        box-shadow: none;
+    }
+    .alert { border: none; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="cfg-wrap">
+
+{% if mode == "disabled" %}
+    <div class="cfg-card">
+        <h1 class="h4 mb-2">Config panel unavailable</h1>
+        <p class="cfg-muted mb-0">Set <code>CONFIG_PASSWORD</code> in the environment to enable <code>/config</code>.</p>
+    </div>
+
+{% elif mode == "login" %}
+    <div class="cfg-card" style="max-width: 420px; margin: 4rem auto;">
+        <h1 class="h4 mb-3">Server config</h1>
+        <p class="cfg-muted">Enter the ops password from <code>CONFIG_PASSWORD</code>.</p>
+        <form method="post" action="{{ url_for('config_login_action') }}">
+            <div class="mb-3">
+                <label class="form-label" for="password">Password</label>
+                <input class="form-control" type="password" id="password" name="password" required autofocus>
+            </div>
+            <button class="btn btn-primary w-100" type="submit">Unlock</button>
+        </form>
+        {% for message in get_flashed_messages(request) %}
+        <div class="alert alert-{{ message.type }} mt-3 mb-0" role="alert">{{ message.message }}</div>
+        {% endfor %}
+    </div>
+
+{% else %}
+    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+        <div>
+            <h1 class="h3 mb-0">Server config</h1>
+            <p class="cfg-muted mb-0">Ops console — password gated</p>
+        </div>
+        <form method="post" action="{{ url_for('config_logout_action') }}">
+            <button class="btn btn-outline-light btn-sm" type="submit">Lock</button>
+        </form>
+    </div>
+
+    {% for message in get_flashed_messages(request) %}
+    <div class="alert alert-{{ message.type }}" role="alert">{{ message.message }}</div>
+    {% endfor %}
+
+    <div class="cfg-card">
+        <h2>Status</h2>
+        <div class="d-flex flex-wrap gap-2 mb-3">
+            {% if status.ok %}
+            <span class="badge badge-ok">DB connected</span>
+            {% else %}
+            <span class="badge badge-bad">DB error</span>
+            {% endif %}
+            {% if status.is_production %}
+            <span class="badge text-bg-warning">production</span>
+            {% else %}
+            <span class="badge text-bg-info">{{ status.env_mode }}</span>
+            {% endif %}
+            <span class="badge text-bg-secondary">pid {{ status.pid }}</span>
+            <span class="badge text-bg-secondary">up {{ status.uptime }}</span>
+        </div>
+        <table class="table table-sm table-dark cfg mb-0">
+            <tbody>
+                <tr><th>Started (UTC)</th><td>{{ status.started_at }}</td></tr>
+                <tr><th>Now (UTC)</th><td>{{ status.now }}</td></tr>
+                <tr><th>Python</th><td>{{ status.python }}</td></tr>
+                <tr><th>Platform</th><td>{{ status.platform }}</td></tr>
+                <tr><th>CWD</th><td>{{ status.cwd }}</td></tr>
+                <tr><th>Users</th><td>{{ status.user_count if status.user_count is not none else "—" }}</td></tr>
+                {% if status.db_error %}
+                <tr><th>DB note</th><td class="text-warning">{{ status.db_error }}</td></tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="cfg-card">
+        <h2>Config &amp; environment</h2>
+        <p class="cfg-muted small">Secrets are masked. Values reflect the live process (after cache clears / ENV toggles).</p>
+        <table class="table table-sm table-dark cfg mb-0">
+            <tbody>
+                {% for key, value in config.items() %}
+                <tr><th>{{ key }}</th><td>{{ value }}</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="cfg-card">
+        <h2>Utilities</h2>
+        <div class="btn-row">
+            <form method="post" action="{{ url_for('config_ping_db_action') }}">
+                <button class="btn btn-outline-info btn-sm" type="submit">Ping DB</button>
+            </form>
+            <form method="post" action="{{ url_for('config_seed_action') }}">
+                <button class="btn btn-outline-success btn-sm" type="submit">Seed demo users</button>
+            </form>
+            <form method="post" action="{{ url_for('config_dispose_pool_action') }}">
+                <button class="btn btn-outline-secondary btn-sm" type="submit">Dispose DB pool</button>
+            </form>
+            <form method="post" action="{{ url_for('config_clear_cache_action') }}">
+                <button class="btn btn-outline-secondary btn-sm" type="submit">Clear settings cache</button>
+            </form>
+            <form method="post" action="{{ url_for('config_toggle_env_action') }}">
+                <button class="btn btn-outline-warning btn-sm" type="submit">
+                    Toggle ENV → {% if status.is_production %}development{% else %}production{% endif %}
+                </button>
+            </form>
+        </div>
+
+        <hr class="border-secondary my-3">
+
+        <form method="post" action="{{ url_for('config_set_env_action') }}" class="row g-2 align-items-end mb-3">
+            <div class="col-sm-6">
+                <label class="form-label" for="mode">Set ENV</label>
+                <select class="form-select form-select-sm" id="mode" name="mode">
+                    <option value="development" {% if not status.is_production %}selected{% endif %}>development</option>
+                    <option value="production" {% if status.is_production %}selected{% endif %}>production</option>
+                </select>
+            </div>
+            <div class="col-sm-6">
+                <button class="btn btn-warning btn-sm" type="submit">Apply ENV</button>
+            </div>
+        </form>
+
+        <form method="post" action="{{ url_for('config_reinit_db_action') }}" class="mb-3"
+              onsubmit="return confirm('Reinitialize the database? This can wipe data if Drop is checked.');">
+            <div class="form-check mb-2">
+                <input class="form-check-input" type="checkbox" value="1" id="drop" name="drop">
+                <label class="form-check-label" for="drop">Drop all tables first</label>
+            </div>
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" value="1" id="seed" name="seed" checked>
+                <label class="form-check-label" for="seed">Seed demo users after</label>
+            </div>
+            <button class="btn btn-danger btn-sm" type="submit">Reinitialize DB</button>
+        </form>
+
+        <form method="post" action="{{ url_for('config_restart_action') }}"
+              onsubmit="return confirm('Exit this process so the host restarts it?');">
+            <button class="btn btn-outline-danger btn-sm" type="submit">Restart server process</button>
+            <span class="cfg-muted small ms-2">Render respawns automatically; local uvicorn may need a manual start.</span>
+        </form>
+    </div>
+{% endif %}
+
+</div>
+{% endblock %}

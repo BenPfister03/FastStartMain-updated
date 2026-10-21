@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block internal_css %}
+<style>
+    body {
+        overflow-x: hidden;
+        background: var(--brand-surface);
+    }
+
+    #wrapper {
+        display: flex;
+        min-height: 100vh;
+    }
+
+    #sidebar {
+        background-color: var(--brand-surface);
+        max-width: 250px;
+        min-height: 100vh;
+        transition: all 0.3s;
+        background: var(--brand-sidebar);
+        border-bottom: 1px solid color-mix(in srgb, var(--brand-ink) 14%, transparent);
+    }
+
+    #sidebar.collapsed {
+        margin-left: -250px;
+    }
+
+    #sidebar .nav-link {
+        color: var(--brand-sidebar-text);
+        font-weight: 500;
+    }
+
+    #sidebar .nav-link:hover,
+    #sidebar .nav-link.active {
+        color: #fff;
+        background-color: color-mix(in srgb, var(--brand-accent) 55%, #000);
+        border-radius: 0.5rem;
+    }
+
+    #sidebar .brand-wordmark {
+        color: #fff;
+        font-size: 1.25rem;
+        text-align: center;
+        margin: 1rem 0 1.5rem;
+    }
+
+    #content {
+        width: 100%;
+        padding: 1rem;
+        transition: all 0.3s;
+        display: flex;
+        flex-direction: column;
+        background-color: #f4f6f8;
+    }
+
+    .navbar {
+        border-bottom: 1px solid #dee2e6;
+    }
+</style>
+{% block additional_styles %}{% endblock %}
+{% endblock %}
+
+{% block content %}
+<div id="wrapper">
+    <nav id="sidebar" class="p-3 d-flex flex-column vh-100">
+        <div class="brand-wordmark">FastStarter</div>
+
+        <ul class="nav nav-pills flex-column gap-2 flex-grow-1">
+            <li class="nav-item">
+                <a class="nav-link d-flex align-items-center {{ 'active' if request.url.path.startswith('/app') }}"
+                   href="{{ url_for('user_home_view') }}">
+                    <span class="material-symbols-outlined me-2">home</span>
+                    Home
+                </a>
+            </li>
+            <li class="nav-item mt-auto">
+                <a class="nav-link d-flex align-items-center text-danger" href="{{ url_for('logout') }}">
+                    <span class="material-symbols-outlined me-2">logout</span>
+                    Logout
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <div id="content">
+        <nav class="navbar navbar-expand-lg bg-white mb-4 px-3 rounded-3 shadow-sm">
+            <button class="btn btn-outline-secondary" id="menu-toggle" type="button">
+                <span class="material-symbols-outlined md-dark">menu</span>
+            </button>
+            <div class="ms-auto d-flex align-items-center gap-3">
+                <span class="fw-semibold">Welcome, {{ user.username }}</span>
+            </div>
+        </nav>
+
+        <div class="row">
+            <div class="col-12">
+                {% for message in get_flashed_messages(request) %}
+                <div class="alert alert-{{ message.type }}" role="alert">{{ message.message }}</div>
+                {% endfor %}
+            </div>
+        </div>
+
+        {% block subpage_content %}{% endblock %}
+    </div>
+</div>
+
+<script>
+    document.getElementById("menu-toggle").addEventListener("click", function () {
+        document.getElementById("sidebar").classList.toggle("collapsed");
+    });
+</script>
+{% block subpage_scripts %}{% endblock %}
+{% endblock %}

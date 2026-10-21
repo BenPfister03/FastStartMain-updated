@@ -1,0 +1,272 @@
+:root {
+  /* Phase 5 theming: Guide overwrites these from docs/report.md preferences */
+  --brand-name: "FastStarter";
+  --brand-bg: #171512;
+  --brand-surface: #f8f4e8;
+  --brand-ink: #25221d;
+  --brand-muted: #756f64;
+  --brand-accent: #d97745;
+  --brand-accent-2: #4f8f86;
+  --brand-sidebar: #232a25;
+  --brand-sidebar-text: #b9c6b9;
+  --brand-font-display: "Fraunces", Georgia, serif;
+  --brand-font-body: "Source Sans 3", "Segoe UI", sans-serif;
+  --brand-radius: 0.85rem;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--brand-font-body);
+  color: var(--brand-ink);
+  background: var(--brand-bg);
+}
+
+.brand-wordmark {
+  font-family: var(--brand-font-display);
+  font-weight: 650;
+  letter-spacing: -0.03em;
+}
+
+/* —— Public landing —— */
+.landing {
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  color: var(--brand-surface);
+  background:
+    linear-gradient(160deg, rgba(23, 21, 18, 0.55), rgba(23, 21, 18, 0.82)),
+    radial-gradient(ellipse 80% 60% at 15% 20%, rgba(79, 143, 134, 0.45), transparent 55%),
+    radial-gradient(ellipse 70% 50% at 90% 80%, rgba(217, 119, 69, 0.3), transparent 50%),
+    linear-gradient(180deg, #30382f 0%, #171512 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.landing::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(
+      -18deg,
+      transparent,
+      transparent 48px,
+      rgba(247, 244, 239, 0.025) 48px,
+      rgba(247, 244, 239, 0.025) 49px
+    );
+  pointer-events: none;
+}
+
+.landing-nav,
+.landing-hero,
+.landing-foot {
+  position: relative;
+  z-index: 1;
+}
+
+.landing-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem clamp(1.25rem, 4vw, 3rem);
+}
+
+.landing-nav-actions {
+  display: flex;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.landing-hero {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(2rem, 8vh, 5rem) clamp(1.25rem, 4vw, 3rem) 3rem;
+  max-width: 42rem;
+}
+
+.landing-kicker {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: color-mix(in srgb, var(--brand-surface) 65%, var(--brand-accent-2));
+  margin: 0 0 1rem;
+}
+
+.landing-nav .brand-wordmark {
+  font-size: clamp(1.4rem, 2.5vw, 1.85rem);
+  color: var(--brand-surface);
+  text-decoration: none;
+}
+.landing-hero .brand-wordmark {
+  font-size: clamp(3rem, 9vw, 5.5rem);
+  line-height: 0.95;
+  margin: 0 0 1.25rem;
+  color: var(--brand-surface);
+}
+
+.landing-lead {
+  font-size: clamp(1.05rem, 2.2vw, 1.25rem);
+  line-height: 1.55;
+  color: color-mix(in srgb, var(--brand-surface) 78%, transparent);
+  margin: 0 0 2rem;
+  max-width: 28rem;
+}
+
+.landing-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.btn-landing {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.35rem;
+  border-radius: 999px;
+  font-weight: 600;
+  text-decoration: none;
+  border: 1.5px solid transparent;
+  transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.btn-landing:hover {
+  transform: translateY(-1px);
+}
+
+.btn-landing-primary {
+  background: var(--brand-accent);
+  color: #fff8f3;
+}
+
+.btn-landing-primary:hover {
+  background: color-mix(in srgb, var(--brand-accent) 85%, #000);
+  color: #fff;
+}
+
+.btn-landing-ghost {
+  background: transparent;
+  color: var(--brand-surface);
+  border-color: color-mix(in srgb, var(--brand-surface) 45%, transparent);
+}
+
+.btn-landing-ghost:hover {
+  border-color: var(--brand-surface);
+  background: color-mix(in srgb, var(--brand-surface) 8%, transparent);
+  color: var(--brand-surface);
+}
+
+.landing-foot {
+  padding: 1.25rem clamp(1.25rem, 4vw, 3rem) 1.75rem;
+  font-size: 0.85rem;
+  color: color-mix(in srgb, var(--brand-surface) 45%, transparent);
+}
+
+.landing-orb {
+  position: absolute;
+  width: min(52vw, 420px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  right: -6%;
+  top: 18%;
+  background:
+    radial-gradient(circle at 35% 35%, rgba(247, 244, 239, 0.18), transparent 55%),
+    radial-gradient(circle at 70% 70%, rgba(79, 143, 134, 0.5), transparent 60%),
+    rgba(217, 119, 69, 0.16);
+  filter: blur(2px);
+  animation: landing-drift 14s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+.landing-orb-2 {
+  width: min(30vw, 220px);
+  left: 8%;
+  right: auto;
+  top: auto;
+  bottom: 12%;
+  opacity: 0.7;
+  animation-duration: 18s;
+  animation-direction: alternate-reverse;
+}
+
+@keyframes landing-drift {
+  from { transform: translate(0, 0) scale(1); }
+  to { transform: translate(-18px, 24px) scale(1.06); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-orb,
+  .landing-orb-2 {
+    animation: none;
+  }
+  .btn-landing:hover {
+    transform: none;
+  }
+}
+
+/* —— Auth —— */
+.auth-shell {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background:
+    radial-gradient(ellipse at top left, color-mix(in srgb, var(--brand-accent-2) 35%, transparent), transparent 55%),
+    radial-gradient(ellipse at bottom right, color-mix(in srgb, var(--brand-accent) 28%, transparent), transparent 50%),
+    var(--brand-bg);
+}
+
+.auth-panel {
+  width: min(420px, 100%);
+  background: var(--brand-surface);
+  color: var(--brand-ink);
+  border-radius: var(--brand-radius);
+  padding: 2rem 1.75rem;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.28);
+}
+
+.auth-panel .brand-wordmark {
+  font-size: 1.75rem;
+  margin-bottom: 0.25rem;
+  color: var(--brand-accent);
+}
+
+.auth-panel .auth-tagline {
+  color: var(--brand-muted);
+  margin-bottom: 1.5rem;
+}
+
+.auth-panel .btn-primary {
+  background: var(--brand-accent);
+  border-color: var(--brand-accent);
+}
+
+.auth-panel .btn-primary:hover {
+  background: color-mix(in srgb, var(--brand-accent) 85%, #000);
+  border-color: color-mix(in srgb, var(--brand-accent) 85%, #000);
+}
+
+.auth-panel .btn-outline-secondary {
+  color: var(--brand-ink);
+  border-color: color-mix(in srgb, var(--brand-ink) 25%, transparent);
+}
+
+.auth-back {
+  display: inline-block;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  color: var(--brand-muted);
+  text-decoration: none;
+}
+
+.auth-back:hover {
+  color: var(--brand-accent);
+}

@@ -1,0 +1,35 @@
+# Render Blueprint for COMP 3613.
+# Students deploy with the Render MCP (create the database, then the web service).
+# MCP config ships in: .cursor/mcp.json (Cursor), .vscode/mcp.json (Copilot), opencode.json (OpenCode).
+# Do not also apply this file in the Dashboard or you will create a second copy.
+# Free web services sleep after inactivity. Free Postgres expires after 30 days.
+
+services:
+  - type: web
+    name: faststarter
+    runtime: python
+    plan: free
+    region: oregon
+    buildCommand: pip install -r requirements.txt
+    startCommand: python manage.py init --no-drop && python manage.py run --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.7"
+      - key: ENV
+        value: production
+      - key: DATABASE_URI
+        fromDatabase:
+          name: faststarter-db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: CONFIG_PASSWORD
+        generateValue: true
+
+databases:
+  - name: faststarter-db
+    databaseName: faststarter
+    plan: free
+    region: oregon
+    postgresMajorVersion: "16"

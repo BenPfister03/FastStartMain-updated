@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %}Session Expired{% endblock %}
+
+
+{% block internal_css %}
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+
+    .page-container {
+        min-height: 100vh;
+    }
+
+    .card-custom {
+        border: none;
+        border-radius: 1rem;
+        overflow: hidden;
+    }
+
+    .left-section {
+        background: linear-gradient(135deg, #0d6efd, #0dcaf0);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        padding: 3rem;
+    }
+
+    .left-section img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .right-section {
+        padding: 3rem;
+    }
+
+    .btn-primary {
+        border-radius: 0.5rem;
+    }
+</style>
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container page-container d-flex align-items-center justify-content-center">
+    <div class="card shadow-lg card-custom col-lg-10">
+        <div class="row g-0">
+
+            <div class="col-lg-6 d-none d-lg-flex left-section">
+                <div class="text-center">
+                    <h2 class="mt-4 fw-bold">Session Expired</h2>
+                    <p class="lead">For security reasons, please sign in again.</p>
+                </div>
+            </div>
+
+            <div class="col-lg-6 bg-white">
+                <div class="right-section d-flex flex-column justify-content-center h-100">
+                    <h1 class="display-5 fw-bold text-danger mb-3">401</h1>
+                    <h3 class="fw-semibold mb-3">Unauthorized</h3>
+                    <p class="text-muted mb-4">
+                        Your session has expired or you do not have permission to access this page.
+                        Please log in again to continue.
+                    </p>
+
+                    <div class="d-grid">
+                        <a href="{{url_for('login_view')}}" class="btn btn-primary btn-lg">
+                            Return to Login
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

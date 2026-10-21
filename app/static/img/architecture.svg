@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900" role="img" aria-labelledby="title description">
+  <title id="title">FastStarter application architecture</title>
+  <desc id="description">A layered FastAPI architecture from browser clients through routes, dependencies, services, repositories, SQLModel models, and the database.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f8f4e8"/>
+      <stop offset="1" stop-color="#e4eee7"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#25221d" flood-opacity="0.12"/>
+    </filter>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#4f8f86"/>
+    </marker>
+    <style>
+      .heading { font: 700 42px Georgia, serif; fill: #25221d; }
+      .subtitle { font: 400 19px 'Segoe UI', sans-serif; fill: #756f64; }
+      .label { font: 700 20px 'Segoe UI', sans-serif; fill: #25221d; }
+      .detail { font: 400 16px 'Segoe UI', sans-serif; fill: #5b554c; }
+      .small { font: 600 14px 'Segoe UI', sans-serif; fill: #756f64; letter-spacing: 1.5px; }
+      .arrow { fill: none; stroke: #4f8f86; stroke-width: 4; marker-end: url(#arrow); }
+    </style>
+  </defs>
+
+  <rect width="1440" height="900" fill="url(#background)"/>
+  <path d="M0 125 H1440 M0 775 H1440" stroke="#d5ded3" stroke-width="2"/>
+
+  <text x="86" y="78" class="heading">FastStarter architecture</text>
+  <text x="86" y="110" class="subtitle">Layered request flow with server-rendered pages and a JSON API</text>
+
+  <g filter="url(#shadow)">
+    <rect x="86" y="205" width="210" height="165" rx="12" fill="#232a25"/>
+    <text x="112" y="253" class="small" fill="#b9c6b9">CLIENT</text>
+    <text x="112" y="292" class="label" fill="#f8f4e8">Browser</text>
+    <text x="112" y="322" class="detail" fill="#d9e2d9">HTML pages</text>
+    <text x="112" y="348" class="detail" fill="#d9e2d9">JSON requests</text>
+
+    <rect x="374" y="165" width="260" height="245" rx="12" fill="#ffffff" stroke="#d97745" stroke-width="3"/>
+    <text x="402" y="212" class="small" fill="#b76034">FASTAPI</text>
+    <text x="402" y="252" class="label">Routes</text>
+    <text x="402" y="284" class="detail">HTML route handlers</text>
+    <text x="402" y="310" class="detail">/api JSON endpoints</text>
+    <text x="402" y="336" class="detail">Templates and static files</text>
+    <text x="402" y="376" class="detail">Session middleware</text>
+
+    <rect x="710" y="165" width="260" height="245" rx="12" fill="#ffffff" stroke="#4f8f86" stroke-width="3"/>
+    <text x="738" y="212" class="small" fill="#39736b">APPLICATION</text>
+    <text x="738" y="252" class="label">Dependencies &amp; services</text>
+    <text x="738" y="284" class="detail">Session dependency</text>
+    <text x="738" y="310" class="detail">Authentication service</text>
+    <text x="738" y="336" class="detail">User service</text>
+    <text x="738" y="376" class="detail">Security and utility helpers</text>
+
+    <rect x="1046" y="165" width="260" height="245" rx="12" fill="#ffffff" stroke="#d97745" stroke-width="3"/>
+    <text x="1074" y="212" class="small" fill="#b76034">DATA ACCESS</text>
+    <text x="1074" y="252" class="label">Repositories</text>
+    <text x="1074" y="284" class="detail">UserRepository</text>
+    <text x="1074" y="310" class="detail">Queries and transactions</text>
+    <text x="1074" y="336" class="detail">Commit and rollback</text>
+  </g>
+
+  <path d="M296 287 H356" class="arrow"/>
+  <path d="M634 287 H692" class="arrow"/>
+  <path d="M970 287 H1028" class="arrow"/>
+
+  <g filter="url(#shadow)">
+    <rect x="458" y="525" width="260" height="150" rx="12" fill="#ffffff" stroke="#4f8f86" stroke-width="3"/>
+    <text x="486" y="572" class="small" fill="#39736b">PERSISTENCE MODEL</text>
+    <text x="486" y="612" class="label">SQLModel models</text>
+    <text x="486" y="644" class="detail">User schema and table mapping</text>
+
+    <rect x="818" y="525" width="260" height="150" rx="12" fill="#232a25"/>
+    <text x="846" y="572" class="small" fill="#b9c6b9">DATABASE</text>
+    <text x="846" y="612" class="label" fill="#f8f4e8">SQLite / PostgreSQL</text>
+    <text x="846" y="644" class="detail" fill="#d9e2d9">SQLAlchemy engine and pool</text>
+  </g>
+
+  <path d="M1176 410 V465 H588 V507" class="arrow"/>
+  <path d="M718 600 H800" class="arrow"/>
+
+  <text x="86" y="832" class="subtitle">Flow: request → route → dependency/service → repository → model → database</text>
+</svg>

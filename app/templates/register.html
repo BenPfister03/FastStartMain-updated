@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Register{% endblock %}
+
+{% block content %}
+<div class="auth-shell">
+  <div class="auth-panel">
+    <a class="auth-back" href="{{ url_for('index_view') }}">← Home</a>
+    <div class="brand-wordmark">FastStarter</div>
+    <p class="auth-tagline">Create an account</p>
+
+    <form method="POST" action="{{ url_for('register_view') }}">
+      <div class="mb-3">
+        <label class="form-label" for="username">Username</label>
+        <input class="form-control" type="text" id="username" name="username" required autofocus>
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="email">Email</label>
+        <input class="form-control" type="email" id="email" name="email" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="password">Password</label>
+        <input class="form-control" type="password" id="password" name="password" required>
+      </div>
+      <div class="d-grid gap-2 mb-3">
+        <button class="btn btn-primary btn-lg" type="submit">Register</button>
+        <a class="btn btn-outline-secondary" href="{{ url_for('login_view') }}">Back to sign in</a>
+      </div>
+
+      {% for message in get_flashed_messages(request) %}
+      <div class="alert alert-{{ message.type }} mb-0" role="alert">{{ message.message }}</div>
+      {% endfor %}
+    </form>
+  </div>
+</div>
+{% endblock %}

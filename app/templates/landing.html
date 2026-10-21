@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}FastStarter{% endblock %}
+
+{% block content %}
+<div class="landing">
+  <div class="landing-orb" aria-hidden="true"></div>
+  <div class="landing-orb landing-orb-2" aria-hidden="true"></div>
+
+  <header class="landing-nav">
+    <a class="brand-wordmark" href="{{ url_for('index_view') }}">FastStarter</a>
+    <div class="landing-nav-actions">
+      {% if user_logged_in %}
+      <a class="btn-landing btn-landing-ghost" href="{{ app_home }}">Open app</a>
+      <a class="btn-landing btn-landing-ghost" href="{{ url_for('logout') }}">Sign out</a>
+      {% else %}
+      <a class="btn-landing btn-landing-ghost" href="{{ url_for('login_view') }}">Sign in</a>
+      <a class="btn-landing btn-landing-primary" href="{{ url_for('register_view') }}">Get started</a>
+      {% endif %}
+    </div>
+  </header>
+
+  <main class="landing-hero">
+    <p class="landing-kicker">Coursework starter</p>
+    <h1 class="brand-wordmark">FastStarter</h1>
+    <p class="landing-lead">
+      A placeholder landing page for your COMP 3613 app.
+      Phase 5 theming replaces these colors, type, and copy with your brand.
+    </p>
+    <div class="landing-cta">
+      {% if user_logged_in %}
+      <a class="btn-landing btn-landing-primary" href="{{ app_home }}">Continue to app</a>
+      {% else %}
+      <a class="btn-landing btn-landing-primary" href="{{ url_for('register_view') }}">Create account</a>
+      <a class="btn-landing btn-landing-ghost" href="{{ url_for('login_view') }}">Sign in</a>
+      {% endif %}
+    </div>
+  </main>
+
+  <footer class="landing-foot">
+    Demo logins after <code>python manage.py init</code>: bob / bobpass · admin / adminpass
+  </footer>
+</div>
+{% endblock %}
